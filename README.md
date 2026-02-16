@@ -15,15 +15,15 @@ It supports **incremental processing** using **watermarks**, so each run process
 
 ```mermaid
 flowchart LR
-  A[Open-Meteo API\nHourly JSON] --> B[Bronze Ingestion\nfetch_openmeteo.py]
-  B --> C[(Bronze Parquet\npartitioned by dt/location)]
-  B --> M[(Bronze Metadata\n_meta/ingest_<run_id>.json)]
+  A["Open-Meteo API (Hourly JSON)"] --> B["Bronze Ingestion (fetch_openmeteo.py)"]
+  B --> C["Bronze Parquet (partitioned by dt and location)"]
+  B --> M["Bronze Metadata (_meta ingest JSON)"]
 
-  C --> D[Silver Transform (Spark)\nbronze_to_silver.py]
-  D --> E[(Silver Parquet\npartitioned by year/month/day/location_part)]
+  C --> D["Silver Transform (Spark bronze_to_silver.py)"]
+  D --> E["Silver Parquet (partitioned by year, month, day, location_part)"]
 
-  E --> F[Gold Aggregations (Spark)\nsilver_to_gold.py]
-  F --> G[(Gold Parquet\npartitioned by location/date)]
+  E --> F["Gold Aggregations (Spark silver_to_gold.py)"]
+  F --> G["Gold Parquet (partitioned by location and date)"]
 
-  G --> H[CSV Exports\nreports/...]
-  G -. optional .-> Q[Great Expectations\nData Quality]
+  G --> H["CSV Exports for Reporting"]
+  G --> Q["Data Quality (Great Expectations)"]
